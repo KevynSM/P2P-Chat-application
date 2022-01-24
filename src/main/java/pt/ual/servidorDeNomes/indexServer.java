@@ -2,17 +2,21 @@ package pt.ual.servidorDeNomes;
 
 import java.io.*;
 import java.awt.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class indexServer extends Frame {
     TextArea Server = new TextArea(12,40);
     socketIndexServer sock = new socketIndexServer(Server);
 
+
+
     public indexServer(String str) {
         super(str);
     }
 
-    public static void main(String[] args)throws IOException{
-        indexServer app = new indexServer("ser16");
+    public static void main(String[] args) throws IOException {
+        indexServer app = new indexServer("indexServer");
         app.resize(320,240);
         app.GUI();
         app.show();

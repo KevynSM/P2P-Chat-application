@@ -36,7 +36,7 @@ public class socket extends Thread {
             int len = DP.getLength();
             String res = new String(Payload,0,0,len);
             String tmp = IPr.toString();
-            String temp=tmp.substring(1);
+            String temp = tmp.substring(1);
             ecran.appendText("\n"+temp+": "+res);
         }
         catch(IOException e){

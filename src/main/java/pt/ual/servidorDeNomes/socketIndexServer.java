@@ -3,12 +3,17 @@ package pt.ual.servidorDeNomes;
 import java.io.*;
 import java.net.*;
 import java.awt.*;
+import java.util.HashMap;
+import java.util.Map;
+
 
 public class socketIndexServer extends Thread {
     InetAddress ER;
     DatagramSocket DS;
-    byte bp[]=new byte[1024];
-    TextArea Server=new TextArea(12,40);
+    byte bp[] = new byte[1024];
+    TextArea Server = new TextArea(12,40);
+
+    Map<String, String> namesMap = new HashMap<String, String>();
 
     socketIndexServer(TextArea ta) {
         Server = ta;
@@ -34,9 +39,41 @@ public class socketIndexServer extends Thread {
             byte Payload[] = DP.getData();
             int len=DP.getLength();
             String msg = new String(Payload,0,0,len);
-            Server.appendText("\nCliente->"+msg);
-            String res = "Servidor->Disse-me: "+msg;
+            Server.appendText("\nCliente->" + msg);
+
+            String action = msg.substring(0, 3);
+
+
+            System.out.println(action);
+
+
+            String res;
+
+            if (action.equals("add")) {
+                String newPin = msg.substring(6, 10);
+                String newName = msg.substring(13);
+
+                System.out.println(newPin);
+                System.out.println(newName);
+
+                namesMap.put(newName, newPin);
+                res = "Usuario registado: " + newName + ": " + namesMap.get(newName).toString();
+            }
+            else if (action.equals("lis")) {
+                res = "Lista de nomes: " + namesMap.toString();
+            }
+            else if (action.equals("nam")) {
+                String name = msg.substring(6);
+                System.out.println(name);
+                res = namesMap.getOrDefault(name, "Nome inexistente");
+            }
+            else {
+                res = "Metodo inexistente";
+
+            }
+
             sendDP(8080,res);
+
         }
         catch (IOException e) {
 
