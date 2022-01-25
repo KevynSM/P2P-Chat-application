@@ -7,17 +7,21 @@ import java.awt.*;
 public class socket extends Thread {
     InetAddress ER, IPr;
     DatagramSocket DS;
+    String pin;
     byte bp[] = new byte[1024];
     TextArea ecran = new TextArea(10,30);
 
-    socket(TextArea ta) {
+    socket(TextArea ta, String pin) {
         ecran = ta;
+        this.pin = pin;
     }
 
     @Override
     public void run(){
         try {
-            DS = new DatagramSocket(8080);
+            System.out.println(pin);
+            DS = new DatagramSocket(Integer.parseInt(pin));
+            System.out.println(DS);
         }
         catch(IOException e){
 
@@ -49,7 +53,8 @@ public class socket extends Thread {
         byte b[] = new byte[len];
         msg.getBytes(0,len,b,0);
         try{
-            ER = InetAddress.getByName(end);
+            ER = InetAddress.getByName("127.0.0.1");
+            System.out.println(ER);
             DatagramPacket DP=new DatagramPacket(b,len,ER,Pr);
             DS.send(DP);
         }catch(IOException e){}

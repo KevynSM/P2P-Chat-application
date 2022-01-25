@@ -5,6 +5,7 @@ import java.net.*;
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 
 public class socketIndexServer extends Thread {
@@ -41,35 +42,51 @@ public class socketIndexServer extends Thread {
             String msg = new String(Payload,0,0,len);
             Server.appendText("\nCliente->" + msg);
 
-            String action = msg.substring(0, 3);
+            String[] commands = msg.split(" ");
 
 
-            System.out.println(action);
+            System.out.println(commands);
 
 
             String res;
 
-            if (action.equals("add")) {
-                String newPin = msg.substring(6, 10);
-                String newName = msg.substring(13);
+            if (commands[0].equals("add")) {
+                String newPin = commands[1];
+                String newName = commands[2];
 
                 System.out.println(newPin);
                 System.out.println(newName);
 
-                namesMap.put(newName, newPin);
-                res = "Usuario registado: " + newName + ": " + namesMap.get(newName).toString();
-            }
-            else if (action.equals("lis")) {
+                if(namesMap.containsKey(newName)) {
+                    res = "Usuário existente!";
+                } else if(namesMap.containsValue(newPin)) {
+                    res = "Pin já utilizado!";
+                } else if(Integer.valueOf(newPin) < 8000 && Integer.valueOf(newPin) > 8010){
+                    res = "Pin têm de ser entre 8000 a 8010.";
+                } else {
+                    namesMap.put(newName, newPin);
+                    res = "Usuário registado: " + newName + ": " + namesMap.get(newName).toString();
+                }
+
+            } else if (commands[0].equals("lis")) {
                 res = "Lista de nomes: " + namesMap.toString();
-            }
-            else if (action.equals("nam")) {
-                String name = msg.substring(6);
+
+            } else if (commands[0].equals("nam")) {
+                String name = commands[1];
                 System.out.println(name);
                 res = namesMap.getOrDefault(name, "Nome inexistente");
-            }
-            else {
-                res = "Metodo inexistente";
 
+            } else if (commands[0].equals("pin")) {
+                String pin = commands[1];
+                System.out.println(pin);
+                if(getSingleKeyFromValue(namesMap, pin) != null){
+                    res = getSingleKeyFromValue(namesMap, pin);
+                } else {
+                    res = "Pin não existente.";
+                }
+
+            } else {
+                res = "Mêtodo inexistente";
             }
 
             sendDP(8080,res);
@@ -96,5 +113,12 @@ public class socketIndexServer extends Thread {
         }
     }
 
-
+    public static <K, V> K getSingleKeyFromValue(Map<K, V> map, V value) {
+        for (Map.Entry<K, V> entry : map.entrySet()) {
+            if (Objects.equals(value, entry.getValue())) {
+                return entry.getKey();
+            }
+        }
+        return null;
+    }
 }
