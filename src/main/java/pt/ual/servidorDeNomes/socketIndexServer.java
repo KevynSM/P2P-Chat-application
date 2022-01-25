@@ -61,7 +61,7 @@ public class socketIndexServer extends Thread {
                     res = "Usuário existente!";
                 } else if(namesMap.containsValue(newPin)) {
                     res = "Pin já utilizado!";
-                } else if(Integer.valueOf(newPin) < 8000 && Integer.valueOf(newPin) > 8010){
+                } else if(Integer.valueOf(newPin) < 8000 || Integer.valueOf(newPin) > 8010){
                     res = "Pin têm de ser entre 8000 a 8010.";
                 } else {
                     namesMap.put(newName, newPin);

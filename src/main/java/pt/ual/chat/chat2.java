@@ -2,10 +2,10 @@ package pt.ual.chat;
 
 
 import java.awt.*;
-import java.io.*;
+import java.io.IOException;
 
-public class chat extends Frame {
-    private static chat app;
+public class chat2 extends Frame {
+    private static chat2 app;
     TextArea ecran = new TextArea(10,30);
     TextField addr = new TextField(30);
     TextField text = new TextField(30);
@@ -15,12 +15,12 @@ public class chat extends Frame {
     socket sock;
 
 
-    public chat(String str){
+    public chat2(String str){
         super(str);
     }
 
     public static void main(String[] args) throws IOException {
-        app=new chat("Chat");
+        app=new chat2("Chat");
         app.resize(320,290);
         app.GUI2();
         app.GUI();
@@ -36,9 +36,9 @@ public class chat extends Frame {
         Panel P = new Panel();
         P.setLayout(new BorderLayout(5,5));
         P.add("North", text);
-        P.add("West", addr);
-        P.add("East", Send);
-        P.add("South", ecran);
+        P.add("West",addr);
+        P.add("East",Send);
+        P.add("South",ecran);
         GridBagConstraints PC = new GridBagConstraints();
         PC.gridwidth = GridBagConstraints.REMAINDER;
         GBL.setConstraints(P,PC);

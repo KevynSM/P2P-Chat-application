@@ -18,7 +18,8 @@ public class socketRegistoDeUtilizadores extends Thread {
     @Override
     public void run(){
         try {
-            DS=new DatagramSocket(8080);
+            DS = new DatagramSocket(8080);
+            System.out.println("DS: " + DS);
         }
         catch(IOException e) {}
         while(true) {
@@ -44,7 +45,8 @@ public class socketRegistoDeUtilizadores extends Thread {
         msg.getBytes(0,len,b,0);
         try{
             ER=InetAddress.getByName("127.0.0.1");
-            DatagramPacket DP=new DatagramPacket(b,len,ER,Pr);
+            DatagramPacket DP = new DatagramPacket(b,len,ER,Pr);
+            System.out.println("DP: " + DP);
             DS.send(DP);
         }catch(IOException e){}
     }
