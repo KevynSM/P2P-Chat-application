@@ -10,6 +10,7 @@ public class chat extends Frame {
     TextField addr = new TextField(30);
     TextField text = new TextField(30);
     TextField code = new TextField(4);
+    TextField myName = new TextField(30);
     Button Check = new Button("Check");
     Button Send = new Button("Send");
     socket sock;
@@ -20,7 +21,7 @@ public class chat extends Frame {
     }
 
     public static void main(String[] args) throws IOException {
-        app=new chat("Chat");
+        app = new chat("Chat 1");
         app.resize(320,290);
         app.GUI2();
         app.GUI();
@@ -53,6 +54,7 @@ public class chat extends Frame {
         setLayout(GBL);
         Panel P = new Panel();
         P.setLayout(new BorderLayout(5,5));
+        P.add("North", myName);
         P.add("West", code);
         P.add("East", Check);
         GridBagConstraints PC = new GridBagConstraints();
@@ -78,7 +80,8 @@ public class chat extends Frame {
     public boolean action(Event i,Object o){
         if(i.target == Check){
             String pin = code.getText();
-            sock = new socket(ecran, pin);
+            String myName = this.myName.getText();
+            sock = new socket(ecran, pin, myName);
             app.StartSocket();
 //            String msg = "pin " + code.getText();
 //            String end = "127.0.0.1";
@@ -89,8 +92,8 @@ public class chat extends Frame {
         if(i.target == Send){
             String msg = text.getText();
             String end = addr.getText();
-            int pr = Integer.parseInt(end);
-            sock.sendDP(pr,msg,end);
+//            int pr = Integer.parseInt(end);
+            sock.sendDP(end,msg);
             text.setText("");
             return true;
         }

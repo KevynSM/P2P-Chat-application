@@ -27,9 +27,9 @@ public class indexServer extends Frame {
     public void GUI(){
         setBackground(Color.lightGray);
         Server.setEditable(false);
-        GridBagLayout GBL=new GridBagLayout();
+        GridBagLayout GBL = new GridBagLayout();
         setLayout(GBL);
-        Panel P1=new Panel();
+        Panel P1 = new Panel();
         P1.setLayout(new BorderLayout(5,5));
         P1.add("Center",Server);
         GridBagConstraints P1C = new GridBagConstraints();

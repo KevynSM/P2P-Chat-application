@@ -38,7 +38,7 @@ public class socketIndexServer extends Thread {
             DatagramPacket DP = new DatagramPacket(bp,1024);
             DS.receive(DP);
             byte Payload[] = DP.getData();
-            int len=DP.getLength();
+            int len = DP.getLength();
             String msg = new String(Payload,0,0,len);
             Server.appendText("\nCliente->" + msg);
 
@@ -74,7 +74,13 @@ public class socketIndexServer extends Thread {
             } else if (commands[0].equals("nam")) {
                 String name = commands[1];
                 System.out.println(name);
-                res = namesMap.getOrDefault(name, "Nome inexistente");
+//                res = namesMap.getOrDefault(name, "Nome inexistente");
+                if(namesMap.containsKey(name)) {
+                    res = "pin " + namesMap.get(name);
+                }
+                else {
+                    res = "Nome inexistente";
+                }
 
             } else if (commands[0].equals("pin")) {
                 String pin = commands[1];
@@ -89,7 +95,9 @@ public class socketIndexServer extends Thread {
                 res = "Mêtodo inexistente";
             }
 
-            sendDP(8080,res);
+
+            int senderPort = DP.getPort();
+            sendDP(senderPort,res);
 
         }
         catch (IOException e) {

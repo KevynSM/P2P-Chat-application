@@ -6,7 +6,7 @@ import java.awt.*;
 public class registoDeUtilizadores extends Frame {
     TextArea Server = new TextArea(10,30);
     TextField Client = new TextField(30);
-    Button Send=new Button("Send");
+    Button Send  =new Button("Send");
     socketRegistoDeUtilizadores sock = new socketRegistoDeUtilizadores(Server);
 
     public registoDeUtilizadores(String str){
@@ -27,7 +27,7 @@ public class registoDeUtilizadores extends Frame {
         Server.setEditable(false);
         GridBagLayout GBL=new GridBagLayout();
         setLayout(GBL);
-        Panel P1=new Panel();
+        Panel P1 = new Panel();
         P1.setLayout(new BorderLayout(5,5));
         P1.add("West",Client);
         P1.add("East",Send);
