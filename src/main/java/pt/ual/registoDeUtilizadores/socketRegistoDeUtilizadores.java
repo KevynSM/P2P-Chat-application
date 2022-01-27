@@ -7,6 +7,7 @@ import java.io.*;
 import java.net.*;
 import java.awt.*;
 import java.security.InvalidKeyException;
+import java.util.Arrays;
 
 public class socketRegistoDeUtilizadores extends Thread {
     private static final String password = "11111111";
@@ -47,7 +48,8 @@ public class socketRegistoDeUtilizadores extends Thread {
 
             Cipher desCipher = Cipher.getInstance("DES/ECB/PKCS5Padding");
 
-            byte[] encodedSTR = res.getBytes();
+            //byte[] encodedSTR = res.getBytes();
+            byte[] encodedSTR = Arrays.copyOfRange(Payload, 0, len);
 
             //Decode message
             desCipher.init(Cipher.DECRYPT_MODE, secretKey);

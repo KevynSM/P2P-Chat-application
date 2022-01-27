@@ -22,7 +22,7 @@ public class chat2 extends Frame {
 
     public static void main(String[] args) throws IOException {
         app = new chat2("Chat 2 ");
-        app.resize(320,290);
+        app.resize(700,290);
         app.GUI2();
         app.GUI();
         app.show();

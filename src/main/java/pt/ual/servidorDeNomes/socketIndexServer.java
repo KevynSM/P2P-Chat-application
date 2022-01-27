@@ -145,25 +145,22 @@ public class socketIndexServer extends Thread {
 
             byte[] clearSTR = msg.getBytes();
 
+
             desCipher.init(Cipher.ENCRYPT_MODE, secretKey);
             byte[] encodedSTR=desCipher.doFinal(clearSTR);
             msg = new String(encodedSTR);
 
 
-        }catch(Exception e){
-            System.out.println(e);
-        }
+            int len = msg.length();
+            byte b[] = new byte[len];
+            msg.getBytes(0,len,b,0);
 
-        int len = msg.length();
-        byte b[] = new byte[len];
-        msg.getBytes(0,len,b,0);
 
-        try {
             ER = InetAddress.getByName("127.0.0.1");
-            DatagramPacket DP = new DatagramPacket(b,len,ER,Pr);
+            DatagramPacket DP = new DatagramPacket(encodedSTR,encodedSTR.length,ER,Pr);
             DS.send(DP);
         }
-        catch (IOException e) {
+        catch (Exception e) {
             System.out.println(e);
         }
     }
