@@ -1,5 +1,9 @@
 package pt.ual.servidorDeNomes;
 
+import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.DESKeySpec;
 import java.io.*;
 import java.net.*;
 import java.awt.*;
@@ -9,6 +13,7 @@ import java.util.Objects;
 
 
 public class socketIndexServer extends Thread {
+    private static final String password = "1111111112222223333333";
     InetAddress ER;
     DatagramSocket DS;
     byte bp[] = new byte[1024];
@@ -40,6 +45,21 @@ public class socketIndexServer extends Thread {
             byte Payload[] = DP.getData();
             int len = DP.getLength();
             String msg = new String(Payload,0,0,len);
+
+            byte key[] = password.getBytes();
+            DESKeySpec desKeySpec = new DESKeySpec(key);
+            SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("DES");
+            SecretKey secretKey = keyFactory.generateSecret(desKeySpec);
+
+            Cipher desCipher = Cipher.getInstance("DES/ECB/PKCS5Padding");
+
+            byte[] encodedSTR = msg.getBytes();
+
+            //Decode message
+            desCipher.init(Cipher.DECRYPT_MODE, secretKey);
+            byte[] clearSTR = desCipher.doFinal(encodedSTR);
+            msg = new String(clearSTR);
+
             Server.appendText("\nCliente->" + msg);
 
             String[] commands = msg.split(" ");
@@ -95,18 +115,35 @@ public class socketIndexServer extends Thread {
                 res = "Mêtodo inexistente";
             }
 
-
             int senderPort = DP.getPort();
             sendDP(senderPort,res);
 
         }
-        catch (IOException e) {
-
+        catch (Exception e) {
+            System.out.println(e);
         }
     }
 
 
     public void sendDP(int Pr,String msg){
+        try{
+            byte key[] = password.getBytes();
+            DESKeySpec desKeySpec = new DESKeySpec(key);
+            SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("DES");
+            SecretKey secretKey = keyFactory.generateSecret(desKeySpec);
+
+            Cipher desCipher = Cipher.getInstance("DES/ECB/PKCS5Padding");
+
+            byte[] clearSTR = msg.getBytes();
+
+            desCipher.init(Cipher.ENCRYPT_MODE, secretKey);
+            byte[] encodedSTR=desCipher.doFinal(clearSTR);
+            msg = new String(encodedSTR);
+
+        }catch(Exception e){
+            System.out.println(e);
+        }
+
         int len = msg.length();
         byte b[] = new byte[len];
         msg.getBytes(0,len,b,0);
@@ -117,7 +154,7 @@ public class socketIndexServer extends Thread {
             DS.send(DP);
         }
         catch (IOException e) {
-
+            System.out.println(e);
         }
     }
 
