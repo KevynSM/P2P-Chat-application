@@ -50,7 +50,7 @@ public class socket extends Thread {
 
             DS.send(DP);
         }catch(IOException e){}
-        this.msg = "";
+//        this.msg = "";
     }
 
     public void receiveDP(){

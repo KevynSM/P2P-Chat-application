@@ -91,9 +91,12 @@ public class chat extends Frame {
         }
         if(i.target == Send){
             String msg = text.getText();
-            String end = addr.getText();
+            String[] endList = addr.getText().split(",");
 //            int pr = Integer.parseInt(end);
-            sock.sendDP(end,msg);
+            for(String end : endList) {
+                sock.sendDP(end,msg);
+            }
+
             text.setText("");
             return true;
         }
