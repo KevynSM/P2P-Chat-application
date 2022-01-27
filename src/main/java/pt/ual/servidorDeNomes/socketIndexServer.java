@@ -7,13 +7,14 @@ import javax.crypto.spec.DESKeySpec;
 import java.io.*;
 import java.net.*;
 import java.awt.*;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
 
 public class socketIndexServer extends Thread {
-    private static final String password = "1111111112222223333333";
+    private static final String password = "11111111";
     InetAddress ER;
     DatagramSocket DS;
     byte bp[] = new byte[1024];
@@ -44,7 +45,11 @@ public class socketIndexServer extends Thread {
             DS.receive(DP);
             byte Payload[] = DP.getData();
             int len = DP.getLength();
+            System.out.println("len: "+ len);
             String msg = new String(Payload,0,0,len);
+
+            System.out.println("(SEND == REC) msg: " + msg);
+            System.out.println("msg length: " + msg.length());
 
             byte key[] = password.getBytes();
             DESKeySpec desKeySpec = new DESKeySpec(key);
@@ -52,12 +57,16 @@ public class socketIndexServer extends Thread {
             SecretKey secretKey = keyFactory.generateSecret(desKeySpec);
 
             Cipher desCipher = Cipher.getInstance("DES/ECB/PKCS5Padding");
-
-            byte[] encodedSTR = msg.getBytes();
+//            byte[] encodedSTR = msg.getBytes();
+            byte[] encodedSTR = Arrays.copyOfRange(Payload, 0, len);
+            System.out.println("(X) encodedSTR: " + encodedSTR);
+            System.out.println("encodedSTR length: " + encodedSTR.length);
 
             //Decode message
             desCipher.init(Cipher.DECRYPT_MODE, secretKey);
+            System.out.println("linha 63");
             byte[] clearSTR = desCipher.doFinal(encodedSTR);
+            System.out.println("(Y) ClearSTR Length:" + clearSTR.length);
             msg = new String(clearSTR);
 
             Server.appendText("\nCliente->" + msg);
@@ -139,6 +148,7 @@ public class socketIndexServer extends Thread {
             desCipher.init(Cipher.ENCRYPT_MODE, secretKey);
             byte[] encodedSTR=desCipher.doFinal(clearSTR);
             msg = new String(encodedSTR);
+
 
         }catch(Exception e){
             System.out.println(e);

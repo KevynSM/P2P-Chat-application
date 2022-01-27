@@ -9,7 +9,7 @@ import java.awt.*;
 import java.security.InvalidKeyException;
 
 public class socketRegistoDeUtilizadores extends Thread {
-    private static final String password = "1111111112222223333333";
+    private static final String password = "11111111";
     InetAddress ER;
     DatagramSocket DS;
     byte bp[]=new byte[1024];
@@ -70,21 +70,31 @@ public class socketRegistoDeUtilizadores extends Thread {
             Cipher desCipher = Cipher.getInstance("DES/ECB/PKCS5Padding");
 
             byte[] clearSTR = msg.getBytes();
+            System.out.println("(Y) ClearSTR Length:" + clearSTR.length);
 
             desCipher.init(Cipher.ENCRYPT_MODE, secretKey);
-            byte[] encodedSTR=desCipher.doFinal(clearSTR);
+            byte[] encodedSTR = desCipher.doFinal(clearSTR);
+            System.out.println("(X) encodedSTR: " + encodedSTR);
+            System.out.println("encodedSTR lenght: " + encodedSTR.length);
             msg = new String(encodedSTR);
+            System.out.println("(SEND) msg: " + msg);
 
-        }catch(Exception e){System.out.println(e);}
 
-        int len=msg.length();
-        byte b[]=new byte[len];
-        msg.getBytes(0,len,b,0);
-        try{
-            ER=InetAddress.getByName("127.0.0.1");
-            DatagramPacket DP = new DatagramPacket(b,len,ER,Pr);
+            int len = msg.length();
+            System.out.println("len: " + len);
+            byte b[] = new byte[len];
+            msg.getBytes(0,len,b,0);
+
+            ER = InetAddress.getByName("127.0.0.1");
+            DatagramPacket DP = new DatagramPacket(encodedSTR,encodedSTR.length,ER,Pr);
             System.out.println("DP: " + DP);
             DS.send(DP);
+
         }catch(Exception e){System.out.println(e);}
+
+
+//        try{
+//
+//        }catch(Exception e){System.out.println(e);}
     }
 }
